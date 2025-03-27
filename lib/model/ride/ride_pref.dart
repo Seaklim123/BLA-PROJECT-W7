@@ -23,4 +23,23 @@ class RidePreference {
         'arrival: ${arrival.name}, '
         'requestedSeats: $requestedSeats)';
   }
-}
+// check if other object is an instance of RidePreference and compare each relevant property
+  @override
+  bool operator == (Object other) {
+    if (identical(this, other)) return true;
+
+    return other is RidePreference &&
+        other.departure == departure &&
+        other.departureDate == departureDate &&
+        other.arrival == arrival &&
+        other.requestedSeats == requestedSeats;
+    }
+    @override
+    int get hashCode {
+    return departure.hashCode ^
+        departureDate.hashCode ^
+        arrival.hashCode ^
+        requestedSeats.hashCode;
+  }
+  }
+

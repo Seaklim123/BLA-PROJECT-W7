@@ -20,14 +20,10 @@ import 'ride_pref_input_tile.dart';
 /// The form can be created with an existing RidePref (optional).
 ///
 class RidePrefForm extends StatefulWidget {
-  const RidePrefForm({
-    super.key,
-    required this.initialPreference,
-    required this.onSubmit,
-  });
-
   final RidePreference? initialPreference;
   final Function(RidePreference preference) onSubmit;
+
+  const RidePrefForm({this.initialPreference, required this.onSubmit});
 
   @override
   State<RidePrefForm> createState() => _RidePrefFormState();
@@ -39,14 +35,21 @@ class _RidePrefFormState extends State<RidePrefForm> {
   Location? arrival;
   late int requestedSeats;
 
-  // ----------------------------------
-  // Initialize the Form attributes
-  // ----------------------------------
-
   @override
-  void initState() {
+  void initStart() {
     super.initState();
+    _initializePreferences();
+  }
+  
+  @override
+  void didUpdateWidget(covariant RidePrefForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialPreference != oldWidget.initialPreference) {
+      _initializePreferences();
+    }
+  }
 
+  void _initializePreferences() {
     if (widget.initialPreference != null) {
       RidePreference current = widget.initialPreference!;
       departure = current.departure;
@@ -54,17 +57,13 @@ class _RidePrefFormState extends State<RidePrefForm> {
       departureDate = current.departureDate;
       requestedSeats = current.requestedSeats;
     } else {
-      // If no given preferences, we select default ones :
-      departure = null; // User shall select the departure
-      departureDate = DateTime.now(); // Now  by default
-      arrival = null; // User shall select the arrival
-      requestedSeats = 1; // 1 seat book by default
+      departure = null;
+      departureDate = DateTime.now();
+      arrival = null;
+      requestedSeats = 1;
     }
+    setState(() {});
   }
-
-  // ----------------------------------
-  // Handle events
-  // ----------------------------------
 
   void onDeparturePressed() async {
     // 1- Select a location
@@ -202,3 +201,4 @@ class _RidePrefFormState extends State<RidePrefForm> {
     );
   }
 }
+
